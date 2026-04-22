@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmacocinética — Quiz Clínico</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f5f7f2;
+  --white:    #ffffff;
+  --dark:     #1a2112;
+  --green:    #2d6a4f;
+  --green2:   #40916c;
+  --green3:   #74c69d;
+  --mint:     #d8f3dc;
+  --blue:     #1b4f72;
+  --blue2:    #2980b9;
+  --gold:     #e9a619;
+  --silver:   #95a5a6;
+  --bronze:   #c0703a;
+  --red:      #c0392b;
+  --red-l:    #fdecea;
+  --green-l:  #eafaf1;
+  --muted:    #6c7a6a;
+  --border:   #d4e0ce;
+  --shadow:   0 2px 16px rgba(45,106,79,.1);
+  --shadow-lg:0 8px 40px rgba(45,106,79,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--dark);
+  min-height:100vh;
+}
+
+/* ── TEXTURE ── */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232d6a4f' fill-opacity='0.025'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+
+/* ── SCREENS ── */
+.screen{display:none;position:relative;z-index:1;min-height:100vh}
+.screen.active{display:block}
+
+/* ══════════════════════════
+   NAV
+══════════════════════════ */
+.topnav{
+  position:sticky;top:0;
+  background:rgba(245,247,242,.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:center;gap:6px;
+  padding:10px 16px;z-index:100;
+}
+.tnav{
+  background:transparent;
+  border:1.5px solid var(--border);
+  color:var(--muted);
+  border-radius:8px;padding:7px 18px;
+  font-family:'DM Sans',sans-serif;
+  font-size:.8rem;font-weight:700;
+  cursor:pointer;transition:all .2s;letter-spacing:.3px;
+}
+.tnav:hover,.tnav.on{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* ══════════════════════════
+   SCREEN: HOME
+══════════════════════════ */
+#s-home{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:48px 24px 80px;text-align:center;
+}
+.home-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--mint);color:var(--green);
+  border:1px solid var(--green3);border-radius:99px;
+  padding:5px 16px;font-size:.75rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;
+}
+.home-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(2.4rem,7vw,4.2rem);
+  font-weight:900;line-height:1;
+  margin-bottom:12px;color:var(--dark);
+}
+.home-title span{color:var(--green)}
+.home-sub{
+  color:var(--muted);font-size:1rem;
+  max-width:480px;line-height:1.7;margin-bottom:36px;
+}
+.home-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:20px;padding:28px 32px;
+  max-width:440px;width:100%;
+  box-shadow:var(--shadow);margin-bottom:24px;
+}
+.home-card h3{
+  font-family:'Fraunces',serif;font-size:1.15rem;
+  font-weight:700;margin-bottom:16px;color:var(--green);
+}
+.name-input{
+  width:100%;background:var(--bg);
+  border:1.5px solid var(--border);border-radius:10px;
+  padding:13px 16px;font-size:.95rem;
+  color:var(--dark);font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color .2s;margin-bottom:12px;
+}
+.name-input:focus{border-color:var(--green)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-family:'DM Sans',sans-serif;font-weight:700;
+  border:none;cursor:pointer;border-radius:10px;
+  transition:transform .15s,background .2s,box-shadow .2s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{
+  background:var(--green);color:#fff;
+  font-size:.95rem;padding:13px 28px;
+  box-shadow:0 4px 16px rgba(45,106,79,.3);
+}
+.btn-primary:hover{background:var(--green2)}
+.btn-block{width:100%}
+.btn-outline{
+  background:transparent;color:var(--green);
+  border:1.5px solid var(--green);
+  font-size:.88rem;padding:10px 22px;
+}
+.btn-outline:hover{background:var(--mint)}
+
+/* home stats */
+.home-stats{
+  display:flex;gap:20px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:32px;
+}
+.hs-item{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:14px;padding:16px 22px;text-align:center;
+  box-shadow:var(--shadow);
+}
+.hs-num{
+  font-family:'Fraunces',serif;font-size:2rem;
+  font-weight:900;color:var(--green);
+}
+.hs-label{font-size:.75rem;color:var(--muted);margin-top:2px}
+
+/* ══════════════════════════
+   SCREEN: GLOSARIO
+══════════════════════════ */
+#s-glosario{padding:0 0 80px}
+.section-hero{
+  background:linear-gradient(135deg,var(--green) 0%,var(--blue) 100%);
+  padding:48px 24px 40px;text-align:center;color:#fff;
+}
+.section-hero h2{
+  font-family:'Fraunces',serif;font-size:2rem;
+  font-weight:900;margin-bottom:8px;
+}
+.section-hero p{opacity:.85;font-size:.93rem;max-width:520px;margin:0 auto}
+
+.glos-wrap{max-width:900px;margin:0 auto;padding:32px 24px}
+
+/* via cards */
+.via-section{margin-bottom:36px}
+.via-header{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:16px;
+}
+.via-icon{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;flex-shrink:0;
+}
+.via-icon.iv{background:#dbeafe}
+.via-icon.oral{background:var(--mint)}
+.via-icon.sl{background:#fef9c3}
+.via-icon.im{background:#fce7f3}
+
+.via-header h3{
+  font-family:'Fraunces',serif;font-size:1.15rem;
+  font-weight:700;color:var(--dark);
+}
+.via-header small{color:var(--muted);font-size:.8rem;display:block;margin-top:2px}
+
+.via-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.drug-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;
+  transition:border-color .2s,transform .2s;
+}
+.drug-card:hover{border-color:var(--green2);transform:translateY(-2px)}
+.drug-name{
+  font-weight:700;font-size:.9rem;color:var(--dark);margin-bottom:4px;
+}
+.drug-class{
+  font-size:.73rem;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;border-radius:6px;
+  padding:2px 8px;display:inline-block;margin-bottom:5px;
+}
+.cls-ans{background:#fef3c7;color:#92400e}
+.cls-ant{background:#dbeafe;color:#1e40af}
+.cls-aps{background:#f3e8ff;color:#6b21a8}
+.cls-iv{background:#dcfce7;color:#166534}
+.drug-note{font-size:.75rem;color:var(--muted);line-height:1.4}
+
+/* CLASIFICACION BIG SECTION */
+.clasif-section{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:20px;padding:28px;margin-bottom:24px;
+  box-shadow:var(--shadow);
+}
+.clasif-section h3{
+  font-family:'Fraunces',serif;font-size:1.2rem;
+  font-weight:700;margin-bottom:4px;
+}
+.clasif-badge{
+  display:inline-block;font-size:.72rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  border-radius:6px;padding:3px 10px;margin-bottom:16px;
+}
+.badge-ans{background:#fef3c7;color:#92400e}
+.badge-ant{background:#dbeafe;color:#1e40af}
+.badge-aps{background:#f3e8ff;color:#6b21a8}
+
+.drug-table{width:100%;border-collapse:collapse}
+.drug-table th{
+  text-align:left;font-size:.72rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);padding:6px 12px;
+  border-bottom:1px solid var(--border);
+}
+.drug-table td{
+  padding:10px 12px;font-size:.85rem;
+  border-bottom:1px solid rgba(0,0,0,.04);
+  vertical-align:top;
+}
+.drug-table tr:last-child td{border-bottom:none}
+.drug-table tr:hover td{background:var(--bg)}
+.td-name{font-weight:700;color:var(--dark)}
+.td-brand{color:var(--muted);font-size:.78rem}
+.td-via{font-size:.78rem}
+
+/* ══════════════════════════
+   SCREEN: QUIZ
+══════════════════════════ */
+#s-quiz{max-width:700px;margin:0 auto;padding:28px 20px 100px}
+
+.quiz-top{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;gap:12px;flex-wrap:wrap;
+}
+.player-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:99px;padding:6px 16px 6px 6px;
+  box-shadow:var(--shadow);
+}
+.p-av{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--green);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:.75rem;font-family:'Fraunces',serif;
+}
+.p-nm{font-size:.85rem;font-weight:700}
+.score-chip{
+  background:var(--mint);color:var(--green);
+  border:1px solid var(--green3);border-radius:99px;
+  padding:5px 16px;font-size:.82rem;font-weight:700;
+}
+
+.prog-bar{height:5px;background:var(--border);border-radius:99px;margin-bottom:28px;overflow:hidden}
+.prog-fill{height:100%;background:var(--green);border-radius:99px;transition:width .4s ease}
+
+.q-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--green2);margin-bottom:10px;
+}
+.q-text{
+  font-family:'Fraunces',serif;
+  font-size:clamp(1.1rem,3vw,1.4rem);
+  font-weight:700;line-height:1.35;
+  margin-bottom:24px;color:var(--dark);
+}
+
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+@media(max-width:480px){.opts{grid-template-columns:1fr}}
+
+.opt{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:12px;padding:14px 16px;
+  color:var(--dark);font-family:'DM Sans',sans-serif;
+  font-size:.88rem;line-height:1.5;
+  cursor:pointer;text-align:left;
+  transition:border-color .2s,background .2s,transform .15s;
+  display:flex;align-items:flex-start;gap:10px;
+  box-shadow:var(--shadow);
+}
+.opt:hover:not(:disabled){
+  border-color:var(--green);background:var(--mint);
+  transform:translateY(-2px);
+}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:#27ae60!important;background:var(--green-l)!important;color:#1a5e2e}
+.opt.no{border-color:var(--red)!important;background:var(--red-l)!important;color:var(--red)}
+.opt-k{
+  min-width:24px;height:24px;border-radius:6px;
+  background:var(--bg);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:800;flex-shrink:0;
+  font-family:'Fraunces',serif;margin-top:1px;color:var(--muted);
+}
+.opt.ok .opt-k{background:#27ae60;color:#fff;border-color:#27ae60}
+.opt.no .opt-k{background:var(--red);color:#fff;border-color:var(--red)}
+
+.feedback{
+  border-radius:14px;padding:16px 20px;
+  margin-bottom:20px;display:none;font-size:.88rem;line-height:1.7;
+}
+.feedback.ok-fb{
+  background:var(--green-l);border:1px solid #a7f3d0;
+  color:#065f46;display:block;
+}
+.feedback.no-fb{
+  background:var(--red-l);border:1px solid #fca5a5;
+  color:#7f1d1d;display:block;
+}
+.fb-title{font-weight:800;margin-bottom:5px;font-size:.92rem}
+
+/* ══════════════════════════
+   SCREEN: RESULTADO
+══════════════════════════ */
+#s-result{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;
+}
+.result-box{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:24px;padding:44px 36px;
+  max-width:540px;width:100%;
+  box-shadow:var(--shadow-lg);text-align:center;
+}
+.res-em{font-size:4rem;margin-bottom:12px}
+.res-title{
+  font-family:'Fraunces',serif;font-size:1.8rem;
+  font-weight:900;margin-bottom:6px;
+}
+.res-big{
+  font-family:'Fraunces',serif;font-size:5rem;
+  font-weight:900;color:var(--green);line-height:1;
+  margin:16px 0 4px;
+}
+.res-sub{color:var(--muted);font-size:.88rem;margin-bottom:20px}
+.res-stars{font-size:2rem;letter-spacing:4px;margin-bottom:20px}
+.res-msg{
+  background:var(--bg);border-radius:12px;
+  padding:14px 18px;font-size:.85rem;
+  color:var(--muted);line-height:1.7;margin-bottom:24px;text-align:left;
+}
+
+/* Answer key */
+.ak{
+  background:var(--bg);border-radius:14px;overflow:hidden;
+  margin-bottom:24px;text-align:left;border:1px solid var(--border);
+}
+.ak-hd{
+  padding:10px 16px;background:var(--mint);
+  font-size:.75rem;font-weight:800;letter-spacing:1px;
+  text-transform:uppercase;color:var(--green);
+  border-bottom:1px solid var(--border);
+}
+.ak-row{
+  display:grid;grid-template-columns:28px 1fr 24px;
+  gap:8px;align-items:start;
+  padding:8px 16px;border-bottom:1px solid rgba(0,0,0,.04);
+  font-size:.78rem;
+}
+.ak-row:last-child{border-bottom:none}
+.ak-n{color:var(--muted);font-weight:800;font-family:'Fraunces',serif}
+.ak-txt{color:#334155;line-height:1.4}
+.ak-txt strong{display:block;color:var(--dark);margin-bottom:1px}
+
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ══════════════════════════
+   SCREEN: RANKING (PÚBLICO)
+══════════════════════════ */
+#s-rank{padding:0 0 80px}
+
+/* PODIO */
+.podio-wrap{
+  background:linear-gradient(160deg,var(--green) 0%,var(--blue) 100%);
+  padding:40px 24px 60px;
+  position:relative;overflow:hidden;
+}
+.podio-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3C/g%3E%3C/svg%3E");
+}
+.podio-title{
+  font-family:'Fraunces',serif;font-size:1.8rem;
+  font-weight:900;color:#fff;text-align:center;
+  margin-bottom:32px;position:relative;
+}
+.podio-title small{display:block;font-size:.85rem;opacity:.7;font-family:'DM Sans',sans-serif;font-weight:400;margin-top:4px}
+
+.podio{
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:12px;max-width:500px;margin:0 auto;
+  position:relative;
+}
+.podio-block{
+  flex:1;max-width:150px;
+  display:flex;flex-direction:column;align-items:center;
+  position:relative;
+}
+.podio-avatar{
+  width:60px;height:60px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:900;font-size:1.3rem;
+  color:#fff;margin-bottom:8px;
+  border:3px solid rgba(255,255,255,.4);
+  box-shadow:0 4px 16px rgba(0,0,0,.2);
+  position:relative;z-index:1;
+}
+.av-1{background:var(--gold)}
+.av-2{background:var(--silver)}
+.av-3{background:var(--bronze)}
+.av-empty{background:rgba(255,255,255,.15)}
+
+.podio-medal{font-size:1.6rem;margin-bottom:4px}
+.podio-name{
+  font-weight:700;font-size:.82rem;color:#fff;
+  text-align:center;margin-bottom:4px;
+  max-width:130px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;
+}
+.podio-pts{
+  font-family:'Fraunces',serif;font-size:1.3rem;
+  font-weight:900;color:#fff;
+}
+.podio-pct{font-size:.72rem;color:rgba(255,255,255,.7);margin-top:2px}
+
+.podio-stand{
+  background:rgba(255,255,255,.15);
+  border-radius:12px 12px 0 0;
+  width:100%;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;
+  padding:10px 0;
+}
+.stand-1{height:90px;background:rgba(233,166,25,.3)}
+.stand-2{height:65px;background:rgba(149,165,166,.3)}
+.stand-3{height:45px;background:rgba(192,112,58,.3)}
+
+.stand-num{
+  font-family:'Fraunces',serif;font-size:2rem;
+  font-weight:900;color:rgba(255,255,255,.4);
+}
+
+/* TABLA COMPLETA */
+.rank-table-wrap{max-width:760px;margin:0 auto;padding:32px 24px}
+.rank-table-wrap h3{
+  font-family:'Fraunces',serif;font-size:1.2rem;
+  font-weight:700;margin-bottom:16px;color:var(--dark);
+}
+.rank-table{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+  box-shadow:var(--shadow);margin-bottom:20px;
+}
+.rt-head{
+  display:grid;grid-template-columns:44px 1fr 80px 80px;
+  padding:11px 20px;background:var(--mint);
+  border-bottom:1px solid var(--border);
+  font-size:.7rem;font-weight:800;letter-spacing:2px;
+  text-transform:uppercase;color:var(--green);gap:8px;
+}
+.rt-head span:nth-child(3),
+.rt-head span:nth-child(4){text-align:center}
+
+.rt-row{
+  display:grid;grid-template-columns:44px 1fr 80px 80px;
+  padding:13px 20px;border-bottom:1px solid rgba(0,0,0,.05);
+  align-items:center;gap:8px;
+  transition:background .15s;
+  animation:rowIn .35s ease both;
+}
+.rt-row:last-child{border-bottom:none}
+.rt-row:hover{background:var(--bg)}
+@keyframes rowIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+
+.rk-badge{
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:900;font-size:.85rem;
+}
+.rk1{background:#fef9c3;color:#a16207}
+.rk2{background:#f1f5f9;color:#475569}
+.rk3{background:#fef3c7;color:#92400e}
+.rkn{background:var(--bg);color:var(--muted)}
+
+.rt-name{font-weight:700;font-size:.88rem}
+.rt-name small{display:block;color:var(--muted);font-size:.72rem;margin-top:1px}
+.rt-pts{
+  text-align:center;font-family:'Fraunces',serif;
+  font-weight:900;font-size:1.05rem;
+}
+.rt-pts.p10{color:var(--gold)} .rt-pts.p8{color:var(--green)} .rt-pts.p6{color:var(--blue2)} .rt-pts.plow{color:var(--red)}
+.rt-acc{
+  text-align:center;font-size:.82rem;
+  font-weight:700;color:var(--muted);
+}
+.acc-mini{height:3px;background:var(--border);border-radius:99px;margin-top:3px;overflow:hidden}
+.acc-mini-fill{height:100%;border-radius:99px}
+
+.empty-rank{
+  text-align:center;padding:48px 24px;
+  color:var(--muted);font-size:.9rem;line-height:1.6;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;top:16px;right:16px;
+  background:var(--dark);color:#fff;
+  border-radius:10px;padding:10px 18px;
+  font-size:.84rem;font-weight:600;
+  z-index:999;transform:translateX(130%);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.toast.show{transform:translateX(0)}
+
+/* CONFETTI */
+@keyframes cf{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ANIM */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .5s ease both}
+.d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<div class="topnav">
+  <button class="tnav on" onclick="go('home')">🏠 Inicio</button>
+  <button class="tnav" onclick="go('glosario')">💊 Fármacos</button>
+  <button class="tnav" onclick="go('rank')">🏆 Ranking</button>
+</div>
+
+<!-- ══════════════════════════
+     HOME
+══════════════════════════ -->
+<section class="screen active" id="s-home">
+  <div style="max-width:900px;margin:0 auto;padding:48px 24px 80px;display:flex;flex-direction:column;align-items:center;text-align:center">
+
+    <div class="home-pill">💊 Psicofarmacología Clínica</div>
+    <h1 class="home-title fade-up">FARMA<span>CINÉTICA</span></h1>
+    <p class="home-sub fade-up d1">Quiz de evaluación sobre <strong>Absorción y Vías de Administración</strong>. Repasa los conceptos de clase y los fármacos más importantes por clasificación.</p>
+
+    <div class="home-stats fade-up d2">
+      <div class="hs-item">
+        <div class="hs-num">10</div>
+        <div class="hs-label">Preguntas</div>
+      </div>
+      <div class="hs-item">
+        <div class="hs-num">100</div>
+        <div class="hs-label">Puntos máx.</div>
+      </div>
+      <div class="hs-item">
+        <div class="hs-num">3</div>
+        <div class="hs-label">Clasificaciones</div>
+      </div>
+    </div>
+
+    <div class="home-card fade-up d3">
+      <h3>🎓 Ingresar al quiz</h3>
+      <input class="name-input" id="pname" type="text" placeholder="Tu nombre completo" maxlength="40"
+        onkeydown="if(event.key==='Enter')startQuiz()">
+      <button class="btn btn-primary btn-block" onclick="startQuiz()">
+        ▶ Comenzar Quiz
+      </button>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center" class="fade-up d4">
+      <button class="btn btn-outline" onclick="go('glosario')">📋 Ver fármacos antes</button>
+      <button class="btn btn-outline" onclick="go('rank')">🏆 Ver ranking</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     GLOSARIO
+══════════════════════════ -->
+<section class="screen" id="s-glosario">
+  <div class="section-hero">
+    <h2>💊 Fármacos por Clasificación</h2>
+    <p>Ansiolíticos · Antidepresivos · Antipsicóticos — y sus vías de administración según lo visto en clase</p>
+  </div>
+
+  <div class="glos-wrap">
+
+    <!-- ANSIOLÍTICOS -->
+    <div class="clasif-section fade-up">
+      <h3>Ansiolíticos (Benzodiacepinas y otros)</h3>
+      <span class="clasif-badge badge-ans">Ansiolíticos</span>
+      <table class="drug-table">
+        <thead>
+          <tr>
+            <th>Nombre genérico</th>
+            <th>Nombre comercial</th>
+            <th>Vía principal</th>
+            <th>Nota clínica</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">Alprazolam</td><td class="td-brand">Xanax®</td><td class="td-via">💊 Oral</td><td>BZD de acción corta-intermedia. Ansiedad y ataques de pánico.</td></tr>
+          <tr><td class="td-name">Lorazepam</td><td class="td-brand">Ativan®</td><td class="td-via">💊 Oral / 👅 SL / 💉 IV/IM</td><td>Versátil: oral, sublingual en crisis agudas, IV en estatus epiléptico.</td></tr>
+          <tr><td class="td-name">Diazepam</td><td class="td-brand">Valium®</td><td class="td-via">💊 Oral / 💉 IV/IM</td><td>BZD de acción larga (t½ 20–100h). IV para estatus epiléptico.</td></tr>
+          <tr><td class="td-name">Clonazepam</td><td class="td-brand">Rivotril®</td><td class="td-via">💊 Oral / 👅 SL</td><td>Ansiedad, trastorno de pánico, epilepsia. Formulación sublingual para crisis.</td></tr>
+          <tr><td class="td-name">Buspirona</td><td class="td-brand">Buspar®</td><td class="td-via">💊 Oral</td><td>No benzodiacepínica. Sin dependencia. Tarda semanas en actuar.</td></tr>
+          <tr><td class="td-name">Midazolam</td><td class="td-brand">Dormicum®</td><td class="td-via">💉 IV / IM</td><td>Sedación e inducción anestésica. IV = acción en segundos.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ANTIDEPRESIVOS -->
+    <div class="clasif-section fade-up d1">
+      <h3>Antidepresivos</h3>
+      <span class="clasif-badge badge-ant">Antidepresivos</span>
+      <table class="drug-table">
+        <thead>
+          <tr>
+            <th>Nombre genérico</th>
+            <th>Nombre comercial</th>
+            <th>Vía</th>
+            <th>Nota clínica</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">Fluoxetina</td><td class="td-brand">Prozac®</td><td class="td-via">💊 Oral</td><td>ISRS. t½ = 1–4 días. Tarda 5–20 días en estabilizarse.</td></tr>
+          <tr><td class="td-name">Sertralina</td><td class="td-brand">Zoloft®</td><td class="td-via">💊 Oral</td><td>ISRS. Primera línea en depresión y TOC.</td></tr>
+          <tr><td class="td-name">Escitalopram</td><td class="td-brand">Lexapro®</td><td class="td-via">💊 Oral</td><td>ISRS de alta selectividad. Buena tolerancia.</td></tr>
+          <tr><td class="td-name">Paroxetina</td><td class="td-brand">Paxil®</td><td class="td-via">💊 Oral</td><td>ISRS. Mayor sedación. Síndrome de discontinuación marcado.</td></tr>
+          <tr><td class="td-name">Venlafaxina</td><td class="td-brand">Effexor®</td><td class="td-via">💊 Oral</td><td>IRSN. Depresión + dolor neuropático.</td></tr>
+          <tr><td class="td-name">Amitriptilina</td><td class="td-brand">Elavil®</td><td class="td-via">💊 Oral</td><td>Tricíclico. Sustrato de CYP2D6. Se acumula con fluoxetina.</td></tr>
+          <tr><td class="td-name">Clomipramina</td><td class="td-brand">Anafranil®</td><td class="td-via">💊 Oral / 💉 IV</td><td>Tricíclico. TOC. IV en psiquiatría hospitalaria.</td></tr>
+          <tr><td class="td-name">Mirtazapina</td><td class="td-brand">Remeron®</td><td class="td-via">💊 Oral</td><td>Noradrenérgico. Estimula apetito. Útil en anorexia + depresión.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ANTIPSICÓTICOS -->
+    <div class="clasif-section fade-up d2">
+      <h3>Antipsicóticos</h3>
+      <span class="clasif-badge badge-aps">Antipsicóticos</span>
+      <table class="drug-table">
+        <thead>
+          <tr>
+            <th>Nombre genérico</th>
+            <th>Nombre comercial</th>
+            <th>Vía</th>
+            <th>Nota clínica</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">Haloperidol</td><td class="td-brand">Haldol®</td><td class="td-via">💊 Oral / 💉 IM / IV</td><td>Típico. Alta potencia. IM para agitación aguda. Depot mensual.</td></tr>
+          <tr><td class="td-name">Risperidona</td><td class="td-brand">Risperdal®</td><td class="td-via">💊 Oral / 💉 IM depot</td><td>Atípico. Depot cada 2 semanas. Psicosis, esquizofrenia.</td></tr>
+          <tr><td class="td-name">Olanzapina</td><td class="td-brand">Zyprexa®</td><td class="td-via">💊 Oral / 💉 IM</td><td>Atípico. IM para agitación aguda. Aumenta peso y glucosa.</td></tr>
+          <tr><td class="td-name">Quetiapina</td><td class="td-brand">Seroquel®</td><td class="td-via">💊 Oral</td><td>Atípico. También en bipolar y depresión resistente.</td></tr>
+          <tr><td class="td-name">Aripiprazol</td><td class="td-brand">Abilify®</td><td class="td-via">💊 Oral / 💉 IM depot</td><td>Agonista parcial D2. Menos efectos metabólicos. Depot mensual.</td></tr>
+          <tr><td class="td-name">Clozapina</td><td class="td-brand">Leponex®</td><td class="td-via">💊 Oral</td><td>Solo oral. Esquizofrenia resistente. Riesgo de agranulocitosis.</td></tr>
+          <tr><td class="td-name">Ziprasidona</td><td class="td-brand">Geodon®</td><td class="td-via">💊 Oral / 💉 IM</td><td>Atípico. Menos aumento de peso. Tomar con alimentos.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- VÍAS RESUMEN -->
+    <div class="clasif-section fade-up d3">
+      <h3>🗺️ Resumen: Vías de Administración</h3>
+      <table class="drug-table">
+        <thead>
+          <tr><th>Vía</th><th>Biodisponibilidad (F)</th><th>Inicio de acción</th><th>Ejemplo psiquiátrico</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">💉 Intravenosa (IV)</td><td><strong style="color:var(--green)">F = 100%</strong></td><td>Segundos</td><td>Diazepam IV, Lorazepam IV, Haloperidol IV</td></tr>
+          <tr><td class="td-name">💊 Oral</td><td>F = 30–80%</td><td>30–90 minutos</td><td>Fluoxetina, Sertralina, Alprazolam, Litio</td></tr>
+          <tr><td class="td-name">👅 Sublingual</td><td>F ≈ 80%</td><td>2–5 minutos</td><td>Lorazepam SL, Clonazepam SL, Nitroglicerina SL</td></tr>
+          <tr><td class="td-name">💪 Intramuscular (IM)</td><td>F = 70–100%</td><td>10–30 minutos</td><td>Haloperidol IM, Olanzapina IM, Risperidona depot</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="text-align:center">
+      <button class="btn btn-primary" onclick="go('home')">🎮 Ir al Quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     QUIZ
+══════════════════════════ -->
+<section class="screen" id="s-quiz">
+  <div class="quiz-top">
+    <div class="player-chip">
+      <div class="p-av" id="q-av">?</div>
+      <span class="p-nm" id="q-nm">—</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div style="font-size:.8rem;color:var(--muted)" id="q-counter">1/10</div>
+      <div class="score-chip" id="q-score">⭐ 0 pts</div>
+    </div>
+  </div>
+
+  <div class="prog-bar"><div class="prog-fill" id="q-prog" style="width:0%"></div></div>
+
+  <div class="q-tag">
+    <span>💊</span>
+    <span id="q-num">PREGUNTA 1</span>
+  </div>
+  <div class="q-text" id="q-text">Cargando...</div>
+  <div class="opts" id="q-opts"></div>
+  <div class="feedback" id="feedback">
+    <div class="fb-title" id="fb-title"></div>
+    <div id="fb-body"></div>
+  </div>
+  <button class="btn btn-primary" id="next-btn" onclick="nextQ()" style="display:none">
+    Siguiente →
+  </button>
+</section>
+
+<!-- ══════════════════════════
+     RESULTADO
+══════════════════════════ -->
+<section class="screen" id="s-result">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px">
+    <div class="result-box">
+      <div class="res-em" id="r-em">🌿</div>
+      <div class="res-title" id="r-title">Resultado</div>
+      <div class="res-big" id="r-big">0/10</div>
+      <div class="res-sub" id="r-sub">0 puntos</div>
+      <div class="res-stars" id="r-stars"></div>
+      <div class="res-msg" id="r-msg"></div>
+      <div class="ak">
+        <div class="ak-hd">📋 Respuestas correctas</div>
+        <div id="ak-rows"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="go('rank')">🏆 Ver Ranking</button>
+        <button class="btn btn-outline" onclick="go('home')">🔄 Jugar de nuevo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     RANKING
+══════════════════════════ -->
+<section class="screen" id="s-rank">
+
+  <!-- PODIO -->
+  <div class="podio-wrap">
+    <div class="podio-title">
+      🏆 Podio de Honor
+      <small>Mejores puntajes de la clase</small>
+    </div>
+    <div class="podio" id="podio-blocks">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <!-- TABLA COMPLETA -->
+  <div class="rank-table-wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <h3>📊 Todos los resultados</h3>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" onclick="go('home')" style="font-size:.78rem;padding:8px 14px">🎮 Jugar</button>
+        <button class="btn btn-outline" onclick="clearRank()" style="font-size:.78rem;padding:8px 14px;color:var(--red);border-color:var(--red)">🗑 Borrar</button>
+      </div>
+    </div>
+
+    <div class="rank-table">
+      <div class="rt-head">
+        <span>#</span><span>Estudiante</span>
+        <span style="text-align:center">Puntos</span>
+        <span style="text-align:center">Aciertos</span>
+      </div>
+      <div id="rank-body">
+        <div class="empty-rank">📭 Sin resultados aún. ¡Sé el primero en jugar!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SCRIPT ════════════════ -->
+<script>
+// ── PREGUNTAS ──────────────────────────────
+const QS = [
+  {
+    q: "¿Cuál es la diferencia fundamental entre farmacocinética y farmacodinamia?",
+    opts:[
+      "Farmacocinética estudia los efectos del fármaco en el cuerpo; farmacodinamia estudia cómo el cuerpo procesa el fármaco",
+      "Farmacocinética es lo que el CUERPO le hace al fármaco (ADME); farmacodinamia es lo que el FÁRMACO le hace al cuerpo",
+      "Son sinónimos que describen el mismo proceso de acción farmacológica",
+      "Farmacocinética solo aplica a fármacos orales; farmacodinamia a todos los demás"
+    ],
+    correct:1,
+    fb:"La farmacocinética = lo que el CUERPO le hace al fármaco (Absorción, Distribución, Metabolismo, Eliminación). La farmacodinamia = lo que el FÁRMACO le hace al cuerpo (mecanismo de acción, efectos). Es la diferencia clave de la diapositiva 1."
+  },
+  {
+    q: "Un paciente recibe diazepam por vía intravenosa. ¿Cuál es su biodisponibilidad (F) y por qué?",
+    opts:[
+      "F = 50%, porque la mitad se metaboliza en el hígado antes de llegar al cerebro",
+      "F = 80%, porque la distribución en tejidos reduce la cantidad disponible",
+      "F = 100%, porque el fármaco entra directamente a la sangre sin pasar por ninguna barrera",
+      "F = 30%, porque el riñón filtra parte del fármaco inmediatamente"
+    ],
+    correct:2,
+    fb:"La vía IV garantiza F = 100% porque el fármaco llega directo a la sangre. Es la referencia de biodisponibilidad. Todas las demás vías se comparan contra ella. Por eso la IV es el estándar de oro cuando se necesita efecto inmediato y dosis exacta."
+  },
+  {
+    q: "¿Por qué la vía sublingual logra una biodisponibilidad (F ≈ 80%) comparable a la IV, siendo mucho más rápida que la vía oral?",
+    opts:[
+      "Porque la mucosa sublingual tiene más receptores farmacológicos que el estómago",
+      "Porque los fármacos sublinguals son siempre más liposolubles que los orales",
+      "Porque se absorbe bajo la lengua y entra directo a la circulación sin pasar por el hígado, evitando su destrucción",
+      "Porque la lengua produce enzimas que potencian la acción del fármaco"
+    ],
+    correct:2,
+    fb:"La vía sublingual absorbe el fármaco directamente en los capilares bajo la lengua, pasando a la circulación sistémica sin pasar por el hígado. Esto evita que el hígado destruya parte del fármaco, por eso actúa en 2–5 minutos con alta biodisponibilidad."
+  },
+  {
+    q: "El lorazepam (Ativan®) puede administrarse por vía oral, sublingual e intravenosa. ¿A qué clasificación de fármaco pertenece?",
+    opts:[
+      "Antidepresivo ISRS",
+      "Antipsicótico atípico",
+      "Ansiolítico benzodiacepínico",
+      "Estabilizador del ánimo"
+    ],
+    correct:2,
+    fb:"El lorazepam es una benzodiacepina, clasificada como ansiolítico. Su versatilidad de vías (oral para ansiedad crónica, sublingual en crisis agudas, IV en estatus epiléptico) lo hace uno de los fármacos más usados en psiquiatría y emergencias."
+  },
+  {
+    q: "Un estudiante toma alprazolam (Xanax®) por vía oral. ¿Cuánto tiempo aproximadamente tardará en sentir el efecto?",
+    opts:[
+      "2–5 minutos, igual que la vía sublingual",
+      "Segundos, porque es un ansiolítico muy potente",
+      "30–90 minutos, que es el tiempo promedio de absorción por vía oral",
+      "6–12 horas, que coincide con su vida media"
+    ],
+    correct:2,
+    fb:"La vía oral tiene un tiempo de inicio de 30–90 minutos porque el fármaco debe pasar por el tracto gastrointestinal, ser absorbido y llegar a la sangre. El alprazolam es un ansiolítico BZD de acción corta-intermedia (t½ = 6–12 h), pero su inicio es oral estándar."
+  },
+  {
+    q: "La fluoxetina (Prozac®) se administra por vía oral y tiene F = 30–80%. ¿A qué clasificación de antidepresivo pertenece?",
+    opts:[
+      "Antidepresivo tricíclico (ATC)",
+      "Inhibidor selectivo de la recaptación de serotonina (ISRS)",
+      "Inhibidor de la recaptación de serotonina y noradrenalina (IRSN)",
+      "Antidepresivo noradrenérgico y serotoninérgico específico (NaSSA)"
+    ],
+    correct:1,
+    fb:"La fluoxetina es un ISRS (Inhibidor Selectivo de la Recaptación de Serotonina). Se administra por vía oral y tiene una vida media muy larga (t½ = 1–4 días), por lo que tarda 5–20 días en alcanzar nivel estable en sangre (estado estacionario)."
+  },
+  {
+    q: "Un paciente con psicosis aguda no puede tragar. El médico prescribe haloperidol (Haldol®). ¿Qué vía es la más apropiada para esta situación y qué ventaja ofrece?",
+    opts:[
+      "Sublingual — porque actúa igual de rápido que la IV y es más cómoda",
+      "Oral con trituración — se puede mezclar con agua para facilitar la ingesta",
+      "Intramuscular (IM) — buena absorción (F = 70–100%), inicio en 10–30 min, útil cuando el paciente no puede tragar",
+      "Intravenosa — es la única opción si el paciente no puede tragar"
+    ],
+    correct:2,
+    fb:"La vía intramuscular es la indicada cuando el paciente no puede tragar. Tiene F = 70–100% y actúa en 10–30 minutos. El haloperidol IM es el antipsicótico típico de primera generación más usado en agitación aguda. También existe en formulación depot (mensual) para adherencia en psicosis crónica."
+  },
+  {
+    q: "¿Cuál de estos fármacos es un antipsicótico ATÍPICO que SOLO se puede administrar por vía ORAL y se reserva para esquizofrenia resistente?",
+    opts:[
+      "Haloperidol (Haldol®) — típico de alta potencia",
+      "Risperidona (Risperdal®) — atípico con formulación depot IM",
+      "Aripiprazol (Abilify®) — agonista parcial con depot mensual",
+      "Clozapina (Leponex®) — atípico solo oral, para esquizofrenia resistente, con riesgo de agranulocitosis"
+    ],
+    correct:3,
+    fb:"La clozapina (Leponex®) es el único antipsicótico indicado en esquizofrenia resistente a otros tratamientos. Solo existe en formulación oral. Requiere monitoreo hematológico regular por riesgo de agranulocitosis (disminución de glóbulos blancos). Es el antipsicótico más eficaz pero también el de mayor riesgo."
+  },
+  {
+    q: "Según la diapositiva, la vía intramuscular tiene una biodisponibilidad de F = 70–100% y actúa en 10–30 minutos. ¿Cuál es la razón principal por la que se usa esta vía en psicofarmacología?",
+    opts:[
+      "Porque es más barata que la vía oral y no requiere prescripción",
+      "Porque tiene exactamente F = 100%, igual que la intravenosa",
+      "Porque es útil cuando el paciente no puede tragar, manteniendo buena absorción",
+      "Porque evita totalmente que el fármaco entre al torrente sanguíneo"
+    ],
+    correct:2,
+    fb:"La diapositiva indica que la vía IM tiene 'buena absorción, útil cuando el paciente no puede tragar.' Su F = 70–100% y actúa en 10–30 minutos. No es igual que IV (que es F = 100% en segundos), pero ofrece una alternativa confiable cuando la vía oral no es posible."
+  },
+  {
+    q: "La diapositiva presenta la biodisponibilidad (F) como concepto central de la Absorción. ¿Cuál de estas afirmaciones describe CORRECTAMENTE qué es la biodisponibilidad?",
+    opts:[
+      "Es el tiempo que tarda el fármaco en ser eliminado por el riñón",
+      "Es el porcentaje del fármaco que llega a la sangre en forma activa; la IV = 100% y la oral < 100%",
+      "Es la dosis total del fármaco que se administra al paciente, independientemente de la vía",
+      "Es la velocidad con la que el hígado destruye el fármaco durante el metabolismo"
+    ],
+    correct:1,
+    fb:"La diapositiva define: 'Biodisponibilidad (F): % del fármaco que llega a la sangre activo. IV = 100%. Oral < 100%.' Es el concepto central de la Absorción porque determina cuánto del fármaco realmente llega a hacer efecto. Elegir bien la vía de administración cambia completamente la dosis eficaz."
+  }
+];
+
+// ── STATE ──────────────────────────────────
+let curQ=0, score=0, correct=0, pname='', answered=false, userAns=[];
+
+// ── NAV ────────────────────────────────────
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  document.querySelectorAll('.tnav').forEach((b,i)=>{
+    b.classList.remove('on');
+    if(['home','glosario','rank'][i]===id) b.classList.add('on');
+  });
+  if(id==='rank') renderRank();
+  window.scrollTo(0,0);
+}
+
+// ── QUIZ ───────────────────────────────────
+function startQuiz(){
+  const inp=document.getElementById('pname');
+  pname=inp.value.trim();
+  if(!pname){showToast('Ingresa tu nombre 👆');inp.focus();return;}
+  curQ=0;score=0;correct=0;answered=false;userAns=[];
+  document.getElementById('q-av').textContent=pname[0].toUpperCase();
+  document.getElementById('q-nm').textContent=pname;
+  go('quiz');
+  loadQ();
+}
+
+function loadQ(){
+  const d=QS[curQ];
+  answered=false;
+  document.getElementById('q-num').textContent=`PREGUNTA ${curQ+1}`;
+  document.getElementById('q-counter').textContent=`${curQ+1}/10`;
+  document.getElementById('q-score').textContent=`⭐ ${score} pts`;
+  document.getElementById('q-prog').style.width=`${(curQ/10)*100}%`;
+  document.getElementById('q-text').textContent=d.q;
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('next-btn').style.display='none';
+
+  const grid=document.getElementById('q-opts');
+  grid.innerHTML='';
+  ['A','B','C','D'].forEach((l,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';
+    b.innerHTML=`<span class="opt-k">${l}</span>${d.opts[i]}`;
+    b.onclick=()=>pick(i);
+    grid.appendChild(b);
+  });
+}
+
+function pick(idx){
+  if(answered)return;
+  answered=true;
+  const d=QS[curQ];
+  const ok=idx===d.correct;
+  userAns.push({q:curQ,chosen:idx,correct:d.correct,ok});
+  document.querySelectorAll('.opt').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===d.correct) b.classList.add('ok');
+    else if(i===idx&&!ok) b.classList.add('no');
+  });
+  if(ok){score+=10;correct++;}
+  const fb=document.getElementById('feedback');
+  fb.className='feedback '+(ok?'ok-fb':'no-fb');
+  document.getElementById('fb-title').textContent=ok?'✅ ¡Correcto!':'❌ Incorrecto';
+  document.getElementById('fb-body').textContent=d.fb;
+  document.getElementById('next-btn').style.display='inline-flex';
+}
+
+function nextQ(){
+  curQ++;
+  if(curQ>=QS.length) finish();
+  else loadQ();
+}
+
+function finish(){
+  saveResult();
+  const pct=Math.round((correct/10)*100);
+  let em,title,stars,msg;
+  if(pct===100){em='🏆';title='¡Perfecto!';stars='⭐⭐⭐';msg='Dominas completamente los conceptos de farmacocinética, las vías de administración y las clasificaciones farmacológicas. Excelente trabajo.';}
+  else if(pct>=80){em='🌿';title='¡Muy bien!';stars='⭐⭐⭐';msg='Muy buen desempeño. Repasa las preguntas donde fallaste para cerrar los conceptos pendientes.';}
+  else if(pct>=60){em='📚';title='En camino';stars='⭐⭐';msg='Vas bien pero hay conceptos que reforzar. Revisa la sección de Fármacos y vuelve a intentarlo.';}
+  else{em='💊';title='A estudiar';stars='⭐';msg='Te recomendamos revisar el glosario de fármacos y las diapositivas de Absorción antes de intentarlo de nuevo.';}
+
+  document.getElementById('r-em').textContent=em;
+  document.getElementById('r-title').textContent=title;
+  document.getElementById('r-big').textContent=`${correct}/10`;
+  document.getElementById('r-sub').textContent=`${score} de 100 puntos · ${pct}%`;
+  document.getElementById('r-stars').textContent=stars;
+  document.getElementById('r-msg').textContent=msg;
+
+  // answer key
+  const rows=document.getElementById('ak-rows');
+  rows.innerHTML='';
+  userAns.forEach((ua,i)=>{
+    const d=QS[ua.q];
+    const shortQ=d.q.length>70?d.q.slice(0,70)+'…':d.q;
+    const row=document.createElement('div');
+    row.className='ak-row';
+    row.innerHTML=`
+      <div class="ak-n">${ua.q+1}</div>
+      <div class="ak-txt">
+        <strong>${shortQ}</strong>
+        ${!ua.ok?`<span style="color:var(--green);font-size:.72rem">✓ ${d.opts[ua.correct].slice(0,60)}${d.opts[ua.correct].length>60?'…':''}</span>`:''}
+      </div>
+      <div style="text-align:center;font-size:.9rem">${ua.ok?'✅':'❌'}</div>`;
+    rows.appendChild(row);
+  });
+
+  go('result');
+  if(pct>=80) confetti();
+}
+
+// ── RANK / PODIO ──────────────────────────
+function saveResult(){
+  const all=getAll();
+  const entry={name:pname,score,correct,pct:Math.round((correct/10)*100),ts:Date.now()};
+  const idx=all.findIndex(e=>e.name.toLowerCase()===pname.toLowerCase());
+  if(idx>=0){if(score>all[idx].score)all[idx]=entry;}
+  else all.push(entry);
+  all.sort((a,b)=>b.score-a.score||b.correct-a.correct);
+  localStorage.setItem('farmaco_rank',JSON.stringify(all));
+}
+
+function getAll(){
+  try{return JSON.parse(localStorage.getItem('farmaco_rank')||'[]');}catch{return[];}
+}
+
+function clearRank(){
+  if(confirm('¿Borrar todos los resultados?')){
+    localStorage.removeItem('farmaco_rank');
+    renderRank();showToast('Tabla borrada ✓');
+  }
+}
+
+function renderRank(){
+  const all=getAll();
+  renderPodio(all);
+  renderTable(all);
+}
+
+function renderPodio(all){
+  const pod=document.getElementById('podio-blocks');
+  pod.innerHTML='';
+
+  // order: 2nd, 1st, 3rd (visual podio layout)
+  const order=[1,0,2];
+  const heights=['stand-2','stand-1','stand-3'];
+  const avCls=['av-2','av-1','av-3'];
+  const medals=['🥈','🥇','🥉'];
+  const sizes=['1','1.15','1'];
+
+  order.forEach((rank,pos)=>{
+    const e=all[rank];
+    const block=document.createElement('div');
+    block.className='podio-block';
+    block.style.transform=`scale(${sizes[pos]})`;
+    block.style.transformOrigin='bottom center';
+
+    if(e){
+      block.innerHTML=`
+        <div class="podio-medal">${medals[pos]}</div>
+        <div class="podio-avatar ${avCls[pos]}">${e.name[0].toUpperCase()}</div>
+        <div class="podio-name" title="${e.name}">${e.name}</div>
+        <div class="podio-pts">${e.score} pts</div>
+        <div class="podio-pct">${e.correct}/10 correctas</div>
+        <div class="podio-stand ${heights[pos]}">
+          <div class="stand-num">${rank+1}</div>
+        </div>`;
+    } else {
+      block.innerHTML=`
+        <div class="podio-medal" style="opacity:.3">${medals[pos]}</div>
+        <div class="podio-avatar av-empty" style="border-color:rgba(255,255,255,.2)">?</div>
+        <div class="podio-name" style="opacity:.4">Vacante</div>
+        <div class="podio-pts" style="opacity:.3">— pts</div>
+        <div class="podio-pct" style="opacity:.3">—</div>
+        <div class="podio-stand ${heights[pos]}">
+          <div class="stand-num" style="opacity:.3">${rank+1}</div>
+        </div>`;
+    }
+    pod.appendChild(block);
+  });
+}
+
+function renderTable(all){
+  const body=document.getElementById('rank-body');
+  if(!all.length){
+    body.innerHTML='<div class="empty-rank">📭 Sin resultados aún. ¡Sé el primero en jugar!</div>';
+    return;
+  }
+  body.innerHTML='';
+  all.forEach((e,i)=>{
+    const rk=i+1;
+    const rkCls=rk===1?'rk1':rk===2?'rk2':rk===3?'rk3':'rkn';
+    const sym=rk===1?'🥇':rk===2?'🥈':rk===3?'🥉':rk;
+    const ptsCls=e.pct===100?'p10':e.pct>=80?'p8':e.pct>=60?'p6':'plow';
+    const barClr=e.pct===100?'var(--gold)':e.pct>=80?'var(--green)':e.pct>=60?'var(--blue2)':'var(--red)';
+    const isMe=e.name.toLowerCase()===pname.toLowerCase();
+    const row=document.createElement('div');
+    row.className='rt-row'+(isMe?' '+'':' ');
+    row.style.animationDelay=(i*.05)+'s';
+    if(isMe) row.style.background='rgba(45,106,79,.06)';
+    row.innerHTML=`
+      <div><div class="rk-badge ${rkCls}">${sym}</div></div>
+      <div class="rt-name">
+        ${e.name}${isMe?' <span style="color:var(--green);font-size:.72rem">← tú</span>':''}
+        <small>${new Date(e.ts).toLocaleString('es-EC',{dateStyle:'short',timeStyle:'short'})}</small>
+      </div>
+      <div class="rt-pts ${ptsCls}">${e.score}<div style="font-size:.68rem;color:var(--muted);font-weight:400">${e.pct}%</div></div>
+      <div class="rt-acc">
+        ${e.correct}/10
+        <div class="acc-mini"><div class="acc-mini-fill" style="width:${e.pct}%;background:${barClr}"></div></div>
+      </div>`;
+    body.appendChild(row);
+  });
+}
+
+// ── HELPERS ────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function confetti(){
+  const cols=['#2d6a4f','#40916c','#74c69d','#e9a619','#1b4f72','#d4e0ce'];
+  for(let i=0;i<70;i++){
+    const el=document.createElement('div');
+    const sz=5+Math.random()*8;
+    el.style.cssText=`
+      position:fixed;left:${Math.random()*100}vw;top:-12px;
+      width:${sz}px;height:${sz}px;
+      background:${cols[Math.floor(Math.random()*cols.length)]};
+      border-radius:${Math.random()>.5?'50%':'2px'};
+      animation:cf ${1.3+Math.random()*2}s ease-in ${Math.random()*.7}s forwards;
+      z-index:9999;pointer-events:none`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3800);
+  }
+}
+</script>
+</body>
+</html>
